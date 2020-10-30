@@ -1,0 +1,45 @@
+#安装docker
+
+#卸载原有包
+- name: yum remove docker
+  yum:
+    name: ['docker','docker-client','docker-client-latest','docker-common','docker-latest','docker-latest-logrotate','docker-logrotate','docker-selinux','docker-engine-selinux','docker-engine']
+    state: absent
+
+# copy docker damon.json
+- name: copy docker-ce.repo
+  copy: src=docker-ce.repo dest=/etc/yum.repos.d/docker-ce.repo
+
+#- name: change docker repo
+ # yum_repository:
+  #  name: docker-ce-stable
+   #$ description: docker YUM repo
+    #baseurl: https://download.docker.com/linux/centos/docker-ce.repo
+   # baseurl: https://mirrors.tuna.tsinghua.edu.cn/docker-ce/linux/centos/docker-ce.repo 
+
+- name: yum install docker
+  yum:
+    name: ['yum-utils','device-mapper-persistent-data','lvm2','docker-ce']
+    state: present
+    update_cache: yes
+
+- name: Create a directory if it does not exist
+  file:
+    path: /etc/docker
+    state: directory
+
+# copy docker daemon.json
+- name: copy daemon.json
+  copy: src=daemon.json dest=/etc/docker/daemon.json
+
+# start docker-ce
+- name: start docker-ce
+  service:
+    name: docker
+    state: started
+    enabled: yes
+
+# 检测状态
+- name: check docker status
+  shell: docker info|grep -A 3 Registry
+
