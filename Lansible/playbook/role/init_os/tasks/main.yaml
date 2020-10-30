@@ -16,7 +16,7 @@
 # 安装常用工具
 - name: install tools
   yum:
-    name: ['telnet', 'curl', 'sysstat', 'nmap', 'iptraf', 'tcpdump', 'mtr', 'lrzsz','tree','net-tools']
+    name: ['telnet', 'curl', 'sysstat', 'nmap', 'iptraf', 'tcpdump', 'mtr', 'lrzsz','tree','net-tools','wget']
     state: latest
     update_cache: yes
 
