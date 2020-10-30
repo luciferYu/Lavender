@@ -1,0 +1,47 @@
+# 本脚本用于初始化Centos7系统
+
+# 更新阿里源
+- name: update yum repo source
+  shell: mv /etc/yum.repos.d/CentOS-Base.repo /etc/yum.repos.d/CentOS-Base.repo.backup && \
+         curl -o /etc/yum.repos.d/CentOS-Base.repo https://mirrors.aliyun.com/repo/Centos-7.repo && \
+         yum makecache
+
+# 更新现有包
+- name: install lib
+  yum:
+    state: latest
+    update_cache: yes
+
+# 安装常用工具
+- name: install tools
+    yum:
+      name: ['telnet', 'curl', 'sysstat', 'nmap', 'iptraf', 'tcpdump', 'mtr', 'lrzsz','tree','net-tools']
+      state: latest
+      update_cache: yes
+
+# 更新时间服务
+
+# 更新 DNS
+- name: copy resolve.conf
+  copy: src=resolve.conf dest=/etc/resolve.conf
+
+# 调整时区
+- name: create timezone link
+  copy: src=/usr/share/zoneinfo/Asia/Shanghai dest=/etc/localtime owner=root group=root
+
+
+# 调整系统参数
+- name: modify tcp_max_tw_buckets
+  sysctl: name="net.ipv4.tcp_max_tw_buckets" value=20000 sysctl_file="/etc/sysctl.d/http_tweak.conf" state=present ignoreerrors=yes reload=yes
+- name: modify tcp_tw_recycle
+  sysctl: name="net.ipv4.tcp_tw_recycle" value=1 state=present ignoreerrors=yes reload=yes
+- name: modify tcp_tw_reuse
+  sysctl: name="net.ipv4.tcp_tw_reuse" value=1 state=present ignoreerrors=yes reload=yes
+- name: disable ipv6
+  sysctl: name="net.ipv6.conf.all.disable_ipv6" value=1 state=present ignoreerrors=yes reload=yes
+- name: disable ipv6
+  sysctl: name="net.ipv6.conf.default.disable_ipv6" value=1 state=present ignoreerrors=yes reload=yes
+- name: disable ipv6
+  sysctl: name="net.ipv6.conf.eth0.disable_ipv6" value=1 state=present ignoreerrors=yes reload=yes
+- name: disable ipv6
+  sysctl: name="net.ipv6.conf.lo.disable_ipv6" value=1 state=present ignoreerrors=yes reload=yes

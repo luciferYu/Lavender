@@ -1,0 +1,93 @@
+---
+#  tasks:
+    - name: print os version
+      debug:
+        msg: "{{ ansible_distribution }}"
+
+    - name: copy /etc/apt/sources.list 
+      copy: src=sources.list-14.04 dest=/etc/apt/sources.list
+      when: ansible_distribution_version == "14.04" and ansible_distribution ==  "Ubuntu"
+      #when: ansible_facts.distribution_version == "14.04" and ansible_facts.distribution ==  "Ubuntu"
+      #when: ansible_facts.distribution_version  | match("14")
+
+    - name: copy /etc/apt/sources.list 
+      copy: src=sources.list-16.04 dest=/etc/apt/sources.list
+      when: ansible_distribution_version == "16.04" and ansible_distribution ==  "Ubuntu"
+      #when: ansible_facts.distribution_version == "16.04" and ansible_facts.distribution ==  "Ubuntu"
+      #when: ansible_facts.distribution_version | match("16")
+
+    #- name: update apt sources
+    #  apt: update_cache=yes
+    #  when: ansible_distribution ==  "Ubuntu"      
+    #
+
+    #- name: install python-pip 
+    #  apt: name=python-pip state=present
+    #  when: ansible_distribution ==  "Ubuntu"      
+
+    #- name: install python-pip 
+    #  yum: name=python-pip state=present
+    #  when: ansible_distribution ==  "CentOS"
+
+    - name: install lib
+      apt:
+        name: ['build-essential', 'tcl', 'gcc', 'make', 'zlib1g-dev', 'libgd2-xpm-dev', 'libperl-dev', 'libgeoip-dev', 'libssl-dev', 'libncursesw5-dev', 'libgdbm-dev', 'libc6-dev', 'libffi-dev', 'openssl', 'libxml2-dev', 'libpcre3', 'libpcre3-dev', 'libncurses5-dev', 'libicu-dev','libfreetype6-dev', 'libmcrypt-dev', 'libcurl4-gnutls-dev', 'libjpeg-dev', 'libpng-dev', 'libxslt1-dev']
+        state: latest
+        update_cache: yes 
+      when: ansible_distribution ==  "Ubuntu"      
+
+    - name: install lib
+      yum:
+        name: ['epel-release',  'tcl', 'gcc', 'make', 'gcc', 'openssl','openssl-devel', 'pcre-devel', 'libvpx-devel', 'libjpeg-devel', 'libpng-devel', 'libXpm-devel', 'gmp-devel',  'bzip2-devel', 'curl-devel', 'libxml2-devel', 'libxml2', 'libxslt-devel', 'perl-ExtUtils-Embed', 'gd-devel', 'geoip-devel']
+        state: latest
+        update_cache: yes 
+      when: ansible_distribution ==  "CentOS"
+
+    - name: install tools
+      apt:
+        name: ['telnet', 'curl', 'sysstat', 'nmap', 'iptraf', 'tcpdump', 'mtr', 'ifstat', 'lrzsz','tree'] 
+        state: latest
+        update_cache: yes
+      when: ansible_distribution ==  "Ubuntu"      
+
+    - name: install tools
+      yum:
+        name: ['telnet', 'curl', 'sysstat', 'nmap', 'iptraf', 'tcpdump', 'mtr', 'lrzsz','tree'] 
+        state: latest
+        update_cache: yes
+      when: ansible_distribution ==  "CentOS"
+
+    - name: copy /etc/security/limits.conf 
+      copy: src=limits.conf dest=/etc/security/limits.conf
+
+    - name: create timezone link
+      copy: src=/usr/share/zoneinfo/Asia/Shanghai dest=/etc/localtime owner=root group=root
+      #file: src=/usr/share/zoneinfo/Asia/Shanghai dest=/etc/localtime state=link owner=root group=root
+
+    - name: create data  directory
+      file:
+        path: "{{ item }}"
+        state: directory
+        recurse: yes
+        owner: ubuntu
+        group: ubuntu
+        mode: '0755'
+      with_items: 
+        - /data
+        - /data/exec
+        - /data/log
+      when: ansible_distribution ==  "Ubuntu"      
+
+    - name: create data  directory
+      file:
+        path: "{{ item }}"
+        state: directory
+        recurse: yes
+        owner: root
+        group: root
+        mode: '0755'
+      with_items: 
+        - /data
+        - /data/exec
+        - /data/log
+      when: ansible_distribution ==  "CentOS"
