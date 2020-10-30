@@ -46,3 +46,15 @@
   sysctl: name="net.ipv6.conf.eth0.disable_ipv6" value=1 state=present ignoreerrors=yes reload=yes
 - name: disable ipv6
   sysctl: name="net.ipv6.conf.lo.disable_ipv6" value=1 state=present ignoreerrors=yes reload=yes
+
+#关闭防火墙
+- name: stop firewalld selinux
+  systemd:
+    state: stopped
+    name: firewalld
+  tags: test
+#关闭selinux
+#- name: stop  selinux
+- selinux:
+    state: disabled
+  tags: test2
