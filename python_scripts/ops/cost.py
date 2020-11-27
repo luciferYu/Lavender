@@ -16,33 +16,6 @@ from tencentcloud.common.profile.client_profile import ClientProfile
 from tencentcloud.common.profile.http_profile import HttpProfile
 region = "ap-shanghai"
 #
-# 系统中需要如下两个环境变量 Tencent_Account DB_OPS
-# Tencent_Account = {"tecent_cloud_accounts":
-#     [
-#         {
-#             "appId": "appId1",
-#             "secretId": "secretId1",
-#             "secretKey": "secretKey2",
-#             "account": "主账号"
-#         },
-#         {
-#             "appId": "appId2",
-#             "secretId": "secretId2",
-#             "secretKey": "secretKey2",
-#             "account": "黑暗信仰游戏服"
-#         },
-#         {
-#             "appId": "appId3",
-#             "secretId": "secretId3",
-#             "secretKey": "secretKey3",
-#             "account": "域名账号"
-#         }
-#     ]
-# }
-
-# DBOPS = {"HOST": "IP地址", "PORT": 端口, "USER": "数据库用户名", "PASSWORD": "密码", "NAME": "数据库"}
-
-
 # 数据库
 # CREATE TABLE `tencent_balance` (
 #   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT 'id',
