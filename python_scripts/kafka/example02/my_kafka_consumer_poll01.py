@@ -7,12 +7,24 @@ import time
 import json
 from kafka import KafkaConsumer,TopicPartition
 kafka_cluster = ['192.168.10.181:9092','192.168.10.182:9092','192.168.10.183:9092']
+topic = 'foobar'
 consumer = KafkaConsumer(group_id='mygroup02',
                          bootstrap_servers=kafka_cluster,
                          key_deserializer=bytes.decode,  # 键的反序列化器 默认为None 传入 b'key'
                          value_deserializer=lambda v: json.loads(v.decode('utf-8')),  # 值的反序列化器 默认为None 传入 b'value'
                          )
-consumer.subscribe(topics=('foobar',))
+
+consumer.subscribe(topics=(topic,))  # 订阅主题
+
+# 或者
+
+# 指定主题和分区和offset
+# partitions = [ TopicPartition(topic=topic,partition=i) for i in range(16)]
+# consumer.assign(partitions=partitions)
+# for i in range(16):
+#     consumer.seek(partitions[i],0)   # 分区[i],offset
+
+
 index = 0
 count = 0
 try:
