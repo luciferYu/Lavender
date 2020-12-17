@@ -12,6 +12,7 @@ consumer = KafkaConsumer(group_id='mygroup02',
                          bootstrap_servers=kafka_cluster,
                          key_deserializer=bytes.decode,  # 键的反序列化器 默认为None 传入 b'key'
                          value_deserializer=lambda v: json.loads(v.decode('utf-8')),  # 值的反序列化器 默认为None 传入 b'value'
+                         max_poll_records = 500 # 单次调用poll返回的最大记录数
                          )
 
 consumer.subscribe(topics=(topic,))  # 订阅主题
@@ -29,7 +30,7 @@ index = 0
 count = 0
 try:
     while True:
-        msg = consumer.poll(timeout_ms=5, max_records=None, update_offsets=True) # 从kafka里获取消息
+        msg = consumer.poll(timeout_ms=5, max_records=None, update_offsets=True) # poll()方法 总是返回由生产者写入kafka但还没有被消费者读取过的记录
         index += 1
         for topic_partion in msg.values():
             for consumer_record in topic_partion:

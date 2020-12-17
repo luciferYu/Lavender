@@ -18,7 +18,7 @@ producer = KafkaProducer(bootstrap_servers=kafka_cluster, # bootstrap_servers �
                          compression_type='gzip', # 压缩算法 snappy gzip lz4
                          acks=1, #acks 0 不会等待服务器响应 1 只要收到群首消息就认为成功响应 all 当所有同步副本接收消息，生产者才会收到服务器的响应
                          retries=3, # 重试次数 默认间隔 100ms
-                         client_id = 'zhiyi',  # 服务器用来识别消息来源
+                         client_id = 'zhiyi_pro',  # 服务器用来识别消息来源
                          max_in_flight_requests_per_connection = 1, # 如果分片内的消息要保证有序 则视为1
                          )
 try:
