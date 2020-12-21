@@ -13,8 +13,8 @@ consumer = KafkaConsumer(group_id='mygroup02',
                          key_deserializer=bytes.decode,  # 键的反序列化器 默认为None 传入 b'key'
                          value_deserializer=lambda v: json.loads(v.decode('utf-8')),  # 值的反序列化器 默认为None 传入 b'value'
                          max_poll_records = 500, # 单次调用poll返回的最大记录数
-                         enable_auto_commit = True,  # 设置是否自动提交偏移量 自动提交虽然方便，但是没有留余地来避免重复消息处理
-                         auto_commit_interval_ms = 5000,  # 如果 enable_auto_commit 设置为True 则为自动提交的间隔
+                         enable_auto_commit = False,  # 设置是否自动提交偏移量 自动提交虽然方便，但是没有留余地来避免重复消息处理
+                         #auto_commit_interval_ms = 5000,  # 如果 enable_auto_commit 设置为True 则为自动提交的间隔
                          )
 
 consumer.subscribe(topics=[topic,])  # 订阅主题
@@ -38,8 +38,12 @@ try:
             for consumer_record in topic_partion:
                 count += 1
                 print('第%s批次消息 第%s条消息：主题 %s 分区 %s offset %s 键 %s 消息内容 %s' % (index,count,consumer_record.topic, consumer_record.partition, consumer_record.offset, consumer_record.key, consumer_record.value))
+        else:
+            try:
+                consumer.commit()
+            except Exception as e:
+                print(e)
         time.sleep(2)
-
 except Exception as e:
     print(e)
 finally:
