@@ -112,7 +112,7 @@ def PrePlot(num=None, rows=None, cols=None):
     if cols is not None and rows is None:
         rows = 1
 
-    # resize the image, depending on the number of rows and cols
+    # resize the images, depending on the number of rows and cols
     size_map = {(1, 1): (8, 6),
                 (1, 2): (14, 6),
                 (1, 3): (14, 6),
