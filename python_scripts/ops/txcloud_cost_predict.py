@@ -13,6 +13,15 @@ from tencentcloud.common.profile.client_profile import ClientProfile
 from tencentcloud.common.profile.http_profile import HttpProfile
 from tencentcloud.common.exception.tencent_cloud_sdk_exception import TencentCloudSDKException
 
+# 数据库
+# CREATE TABLE `tencent_balance_predict` (
+#   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT 'id',
+#   `dt` datetime DEFAULT NULL COMMENT '日期时间',
+#   `account` varchar(64) DEFAULT NULL COMMENT '账号',
+#   `balance_predict` int(11) DEFAULT NULL COMMENT '预测余额',
+#   PRIMARY KEY (`id`)
+# ) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4
+
 def all_balance(account):
     from tencentcloud.billing.v20180709 import billing_client, models
     try:
